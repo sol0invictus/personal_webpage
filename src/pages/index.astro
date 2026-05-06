@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import profile from '../assets/profile.jpg';
+---
+<Base title="Sunny Guha" description="ML researcher — blog, projects, publications.">
+  <div class="about">
+    <Image
+      src={profile}
+      alt="Sunny Guha"
+      widths={[240, 480, 720]}
+      sizes="(max-width: 540px) 70vw, 240px"
+      class="about-photo"
+      loading="eager"
+    />
+    <div class="about-text">
+      <h1>Sunny Guha</h1>
+      <p>
+        I'm a machine learning researcher. My work focuses on
+        <em>(short description of research interests — replace this)</em>.
+      </p>
+      <p>
+        I write about the things I'm reading and building on the
+        <a href="/blog">blog</a>. A list of things I've made is on
+        <a href="/projects">projects</a>, and academic work is on
+        <a href="/publications">publications</a>.
+      </p>
+      <p>
+        Reach me at <a href="mailto:eosaten@gmail.com">eosaten@gmail.com</a>.
+      </p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+    margin-top: 0.5rem;
+  }
+  .about-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+  }
+  .about-text :global(h1) { margin-top: 0; }
+  .about-text :global(p:first-of-type) { margin-top: 0.4em; }
+
+  @media (max-width: 540px) {
+    .about {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .about-photo {
+      max-width: 18rem;
+      margin: 0 auto;
+    }
+  }
+</style>

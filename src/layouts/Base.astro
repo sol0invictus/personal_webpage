@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Personal website' } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="/" class="site-title">Sunny Guha</a>
+        <nav class="site-nav">
+          <a href="/" class={isActive('/') ? 'is-active' : ''}>About</a>
+          <a href="/blog" class={isActive('/blog') ? 'is-active' : ''}>Blog</a>
+          <a href="/projects" class={isActive('/projects') ? 'is-active' : ''}>Projects</a>
+          <a href="/publications" class={isActive('/publications') ? 'is-active' : ''}>Publications</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      &copy; {new Date().getFullYear()} Sunny Guha
+    </footer>
+  </body>
+</html>

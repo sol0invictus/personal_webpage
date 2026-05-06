@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects';
+
+const sorted = [...projects].sort((a, b) => b.year - a.year);
+---
+<Base title="Projects — Sunny Guha" description="Personal projects and side experiments.">
+  <h1>Projects</h1>
+  <p>Things I've built outside of academic work.</p>
+  <ul class="entry-list">
+    {sorted.map((p) => (
+      <li>
+        <time>{p.year}</time>
+        <div>
+          <strong>{p.title}</strong>
+          <div class="entry-desc">{p.description}</div>
+          {p.links && p.links.length > 0 && (
+            <div style="margin-top: 0.3em; font-size: 0.92rem;">
+              {p.links.map((l, i) => (
+                <>
+                  {i > 0 && <span style="color: var(--fg-muted);"> · </span>}
+                  <a href={l.href}>{l.label}</a>
+                </>
+              ))}
+            </div>
+          )}
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>

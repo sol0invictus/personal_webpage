@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { publications } from '../data/publications';
+
+const byYear = new Map<number, typeof publications>();
+for (const pub of publications) {
+  const list = byYear.get(pub.year) ?? [];
+  list.push(pub);
+  byYear.set(pub.year, list);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+<Base title="Publications — Sunny Guha" description="Academic publications and preprints.">
+  <h1>Publications</h1>
+  {years.length === 0 ? (
+    <p>No publications listed yet.</p>
+  ) : (
+    years.map((year) => (
+      <section>
+        <h2>{year}</h2>
+        <ul style="list-style: none; padding: 0; margin: 0.5em 0;">
+          {byYear.get(year)!.map((pub) => (
+            <li style="margin: 0.9em 0;">
+              <div><strong>{pub.title}</strong></div>
+              <div style="color: var(--fg-muted); font-size: 0.95rem;">{pub.authors}</div>
+              <div style="color: var(--fg-muted); font-size: 0.95rem;">
+                <em>{pub.venue}</em>
+                {pub.note && <span> — {pub.note}</span>}
+              </div>
+              {pub.links && pub.links.length > 0 && (
+                <div style="margin-top: 0.2em; font-size: 0.92rem;">
+                  {pub.links.map((l, i) => (
+                    <>
+                      {i > 0 && <span style="color: var(--fg-muted);"> · </span>}
+                      <a href={l.href}>{l.label}</a>
+                    </>
+                  ))}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  )}
+</Base>
