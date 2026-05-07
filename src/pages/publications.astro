@@ -1,45 +1,63 @@
 ---
 import Base from '../layouts/Base.astro';
-import { publications } from '../data/publications';
+import { publications, categoryLabels, categoryOrder, type PublicationCategory } from '../data/publications';
 
-const byYear = new Map<number, typeof publications>();
+const byCategory = new Map<PublicationCategory, typeof publications>();
 for (const pub of publications) {
-  const list = byYear.get(pub.year) ?? [];
+  const list = byCategory.get(pub.category) ?? [];
   list.push(pub);
-  byYear.set(pub.year, list);
+  byCategory.set(pub.category, list);
 }
-const years = [...byYear.keys()].sort((a, b) => b - a);
+
+const sections = categoryOrder
+  .filter((cat) => byCategory.has(cat))
+  .map((cat) => {
+    const pubs = byCategory.get(cat)!.slice().sort((a, b) => b.year - a.year);
+    const byYear = new Map<number, typeof publications>();
+    for (const pub of pubs) {
+      const list = byYear.get(pub.year) ?? [];
+      list.push(pub);
+      byYear.set(pub.year, list);
+    }
+    const years = [...byYear.keys()].sort((a, b) => b - a);
+    return { category: cat, years, byYear };
+  });
 ---
 <Base title="Publications — Sunny Guha" description="Academic publications and preprints.">
   <h1>Publications</h1>
-  {years.length === 0 ? (
+  {sections.length === 0 ? (
     <p>No publications listed yet.</p>
   ) : (
-    years.map((year) => (
-      <section>
-        <h2>{year}</h2>
-        <ul style="list-style: none; padding: 0; margin: 0.5em 0;">
-          {byYear.get(year)!.map((pub) => (
-            <li style="margin: 0.9em 0;">
-              <div><strong>{pub.title}</strong></div>
-              <div style="color: var(--fg-muted); font-size: 0.95rem;">{pub.authors}</div>
-              <div style="color: var(--fg-muted); font-size: 0.95rem;">
-                <em>{pub.venue}</em>
-                {pub.note && <span> — {pub.note}</span>}
-              </div>
-              {pub.links && pub.links.length > 0 && (
-                <div style="margin-top: 0.2em; font-size: 0.92rem;">
-                  {pub.links.map((l, i) => (
-                    <>
-                      {i > 0 && <span style="color: var(--fg-muted);"> · </span>}
-                      <a href={l.href}>{l.label}</a>
-                    </>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+    sections.map(({ category, years, byYear }) => (
+      <section style="margin-top: 2em;">
+        <h2>{categoryLabels[category]}</h2>
+        {years.map((year) => (
+          <section style="margin-top: 1em;">
+            <h3 style="font-size: 1.05rem; color: var(--fg-muted); margin-bottom: 0.3em;">{year}</h3>
+            <ul style="list-style: none; padding: 0; margin: 0.3em 0;">
+              {byYear.get(year)!.map((pub) => (
+                <li style="margin: 0.9em 0;">
+                  <div><strong>{pub.title}</strong></div>
+                  <div style="color: var(--fg-muted); font-size: 0.95rem;">{pub.authors}</div>
+                  <div style="color: var(--fg-muted); font-size: 0.95rem;">
+                    <em>{pub.venue}</em>
+                    {pub.note && <span> — {pub.note}</span>}
+                  </div>
+                  {pub.links && pub.links.length > 0 && (
+                    <div style="margin-top: 0.2em; font-size: 0.92rem;">
+                      {pub.links.map((l, i) => (
+                        <>
+                          {i > 0 && <span style="color: var(--fg-muted);"> · </span>}
+                          <a href={l.href}>{l.label}</a>
+                        </>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </section>
     ))
   )}
