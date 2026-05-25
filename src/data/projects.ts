@@ -2,7 +2,7 @@ export interface Project {
   title: string;
   year: number;
   description: string;
-  links?: { label: string; href: string }[];
+  links?: { label: string; href: string; sibling?: string }[];
 }
 
 export const projects: Project[] = [
@@ -10,7 +10,10 @@ export const projects: Project[] = [
     title: 'Origin Map',
     year: 2026,
     description:
-      'Coming soon — link will be added later.',
+      'An interactive map of origin myths from cultures around the world. Browse creation stories, cosmogonies, and "how the world began" narratives by region, with each entry sourced and cross-referenced. A long-running side project of mine that grew out of reading too much comparative mythology.',
+    links: [
+      { label: 'site', href: 'https://originmap.eosaten.workers.dev/', sibling: 'originmap' },
+    ],
   },
   {
     title: 'nanoScaling',

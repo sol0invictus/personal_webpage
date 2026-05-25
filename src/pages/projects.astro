@@ -19,7 +19,7 @@ const sorted = [...projects].sort((a, b) => b.year - a.year);
               {p.links.map((l, i) => (
                 <>
                   {i > 0 && <span style="color: var(--fg-muted);"> · </span>}
-                  <a href={l.href}>{l.label}</a>
+                  <a href={l.href} data-sibling-subdomain={l.sibling}>{l.label}</a>
                 </>
               ))}
             </div>
@@ -29,3 +29,17 @@ const sorted = [...projects].sort((a, b) => b.year - a.year);
     ))}
   </ul>
 </Base>
+
+<script is:inline>
+  (() => {
+    const links = document.querySelectorAll('a[data-sibling-subdomain]');
+    if (!links.length) return;
+    const host = window.location.hostname;
+    const parts = host.split('.');
+    const base = parts.length >= 3 ? parts.slice(1).join('.') : host;
+    links.forEach((a) => {
+      const sub = a.getAttribute('data-sibling-subdomain');
+      if (sub) a.href = `${window.location.protocol}//${sub}.${base}/`;
+    });
+  })();
+</script>
