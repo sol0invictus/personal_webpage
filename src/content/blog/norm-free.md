@@ -1,5 +1,5 @@
 ---
-title: "What RMSNorm Actually Does (And Why You Can't Replace It With Tanh)"
+title: "What RMSNorm Actually Does (And Why You Can't Replace It With a Point-wise Norm)"
 description: "An empirical dissection of normalization in transformers, and why the backward coupling, not the forward rescaling, is what makes RMSNorm work."
 date: 2026-05-25
 tags: [transformers, normalization, deep-learning, experiments]
@@ -125,9 +125,11 @@ Doubling the width closes the gap by a factor of 7. To see why, we have to track
 
 **The signal scale grows layer by layer.** At every block, the residual stream gets an additive update: $x_{\ell+1} = x_\ell + \mathrm{Block}(x_\ell)$. If the block's output is independent of $x_\ell$ (a reasonable approximation at init), then variances add: $\mathrm{Var}(x_{\ell+1}) = \mathrm{Var}(x_\ell) + \mathrm{Var}(\mathrm{Block})$. So the std of the residual stream grows roughly as $\sqrt{\ell}$ in the number of layers, assuming each block contributes a constant amount.
 
-But how much does each block contribute? That's where width enters. A block's output passes through `c_proj`, a linear map from intermediate dimension back into $d_\text{model}$. Standard GPT-2 init draws `c_proj` weights from $\mathcal{N}(0, (0.02/\sqrt{2N_\text{layers}})^2)$. Two effects then compound:
+But how much does each block contribute? That's where width enters. Each sublayer ends in a projection conventionally named `c_proj`. In attention, it is the output projection that maps the concatenated head outputs back to $d_\text{model}$; in the MLP, it is the second linear layer that maps the $4 d_\text{model}$ hidden activations back down to $d_\text{model}$. In both cases `c_proj` is the layer that *writes* the sublayer's result into the residual stream, so its weight scale directly controls how large each block's contribution to $x_{\ell+1} = x_\ell + \mathrm{Block}(x_\ell)$ is at init.
 
-1. **`c_proj` init std.** For the deep model ($N = 24$): $0.02/\sqrt{48} \approx 0.0029$. For the shallow model ($N = 5$): $0.02/\sqrt{10} \approx 0.0063$. The shallow model's block-output weights start about 2.2x larger.
+And in our setup the init **is** scaled with depth, exactly as written. We use the standard nanoGPT GPT-2 init, which singles out the residual-writing projections: only `c_proj` weights get the depth-dependent rescaling, drawn from $\mathcal{N}(0, (0.02/\sqrt{2N_\text{layers}})^2)$, while every other linear layer uses a flat $\mathcal{N}(0, 0.02^2)$. The $\sqrt{2N_\text{layers}}$ factor is there to keep the residual-stream variance from growing unboundedly with depth — deeper models get smaller block outputs at init by construction. Two effects then compound:
+
+1. **`c_proj` init std shrinks with depth.** For the deep model ($N = 24$): $0.02/\sqrt{2 \cdot 24} = 0.02/\sqrt{48} \approx 0.0029$. For the shallow model ($N = 5$): $0.02/\sqrt{2 \cdot 5} = 0.02/\sqrt{10} \approx 0.0063$. The shallow model's block-output weights start about 2.2x larger.
 2. **Width amplification through MLP.** The block's output is roughly $\mathrm{c\_proj} \cdot \mathrm{activations}$, and the activations are themselves a function of $d$-dimensional inputs. Sum-over-channels gives a $\sqrt{d}$ factor. Width 2048 gives a $\sqrt{2}$ boost over width 1024.
 
 Multiplying these gives the wide model's residual stream growing roughly 3x faster per layer in std. Add the layer-count effect ($\sqrt{\ell}$), and after a handful of layers the signal at width 2048 has grown into the range where $|\alpha x|$ exceeds the linear regime of $\tanh$ (roughly $|\alpha x| \gtrsim 0.5$). Once you're in the bend region of $\tanh$, the derivative starts to differ meaningfully from the constant $\alpha$, gradients carry information about $x$, and the block starts to actually learn.
@@ -343,6 +345,6 @@ Of these two, the backward coupling is the more surprising and more essential fi
 
 ---
 
-*Experiments: 360M GPT, 20 TPP (7.2B tokens FineWeb-Edu), 8×B200 DDP, AdamW lr=3e-4, AGINanoGPT codebase. All runs completed in $\le$15 minutes per variant on AWS Green HyperPod P6-B200.*
+*Experiments: 360M GPT, 20 TPP (7.2B tokens FineWeb-Edu), 8×B200 DDP, AdamW lr=3e-4.*
 
 *Reference: Zhu, J., Chen, X., He, K., LeCun, Y., & Liu, Z. (2025). [Transformers without Normalization](https://arxiv.org/abs/2503.10622). arXiv:2503.10622.*

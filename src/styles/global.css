@@ -154,5 +154,32 @@ li { margin: 0.3em 0; }
   .entry-list li { grid-template-columns: 1fr; gap: 0.1rem; }
 }
 
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6em 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.7em;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+thead th {
+  border-bottom: 2px solid var(--rule);
+  font-weight: 600;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: var(--code-bg); }
+
+/* Let wide tables scroll horizontally instead of overflowing the viewport */
+.table-wrap, table { max-width: 100%; }
+@media (max-width: 540px) {
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+
 /* KaTeX display blocks: keep them from overflowing on narrow screens */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.2em 0; }

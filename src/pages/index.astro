@@ -8,8 +8,8 @@ import profile from '../assets/profile.jpg';
     <Image
       src={profile}
       alt="Sunny Guha"
-      widths={[240, 480, 720]}
-      sizes="(max-width: 540px) 70vw, 240px"
+      widths={[320, 640, 960]}
+      sizes="(max-width: 540px) 80vw, 320px"
       class="about-photo"
       loading="eager"
     />
@@ -49,7 +49,7 @@ import profile from '../assets/profile.jpg';
 <style>
   .about {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 320px 1fr;
     gap: 1.75rem;
     align-items: start;
     margin-top: 0.5rem;
@@ -69,7 +69,7 @@ import profile from '../assets/profile.jpg';
       gap: 1rem;
     }
     .about-photo {
-      max-width: 18rem;
+      max-width: 22rem;
       margin: 0 auto;
     }
   }
