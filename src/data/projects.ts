@@ -7,6 +7,15 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: 'Frontier LLM Catalogue',
+    year: 2026,
+    description:
+      'A reference catalogue of frontier language models: architecture, pretraining, fine-tuning, RL, training tricks, ablations, and benchmarks, with a side-by-side compare view. Every fact cites the strongest source that states it, ranked from technical report down to lab blog, Hugging Face model card / config, and third-party posts.',
+    links: [
+      { label: 'site', href: 'https://llmcatalog.sunnyguha.com/', sibling: 'llmcatalog' },
+    ],
+  },
+  {
     title: 'Origin Map',
     year: 2026,
     description:
