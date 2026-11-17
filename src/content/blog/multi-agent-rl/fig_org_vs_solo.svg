@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 446" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12">
+  <title>One partitioned task (o19900001: average Finance salary across boreal and cobalt) in the base organisation, the trained organisation, and the single-agent solo harness, using the logged evaluation results.</title>
+  <style>
+    .m { font-family: "DejaVu Sans Mono", Menlo, monospace; font-size: 10.5px; white-space: pre; }
+    .r { font-size: 10px; fill: #666; letter-spacing: 0.04em; }
+    .h { font-size: 14px; font-weight: bold; fill: #1a1a1a; }
+    .s { font-size: 11px; fill: #52514e; }
+  </style>
+  <rect width="880" height="446" fill="#fdfdfd"/>
+
+  <!-- task banner -->
+  <rect x="20" y="14" width="840" height="56" rx="6" fill="#f3f2ee" stroke="#b9b8b2"/>
+  <text x="34" y="35" font-weight="bold" fill="#1a1a1a">“What is the average salary in the Finance department?” · 2 sites · inconsistent department names</text>
+  <text x="34" y="56" fill="#52514e">boreal: 23 Finance employees, $2,072,200  ·  cobalt: 20 Finance employees, $1,587,300  ·  gold = 3,659,500 / 43 = 85,104.65</text>
+
+  <!-- ===== Column 1: Base org (wrong) ===== -->
+  <g transform="translate(20,86)">
+    <rect width="270" height="346" rx="6" fill="#fdfdfd" stroke="#d64545" stroke-width="2"/>
+    <text x="14" y="25" class="h">Untrained team (step 0)</text>
+    <text x="14" y="43" class="s">loses one site's data → wrong</text>
+
+    <text x="14" y="68" class="r">ROLLOUT</text>
+    <rect x="10" y="74" width="250" height="64" rx="4" fill="#f3f2ee"/>
+    <text x="18" y="93" class="m">lead turns       6 / 6 (cap)</text>
+    <text x="18" y="111" class="m">workers at cap   3 requests</text>
+    <text x="18" y="129" class="m">critical path    30 calls</text>
+
+    <text x="14" y="160" class="r">FINAL ANSWER</text>
+    <rect x="10" y="166" width="250" height="28" rx="4" fill="#fdefe8" stroke="#d64545"/>
+    <text x="18" y="184" class="m" fill="#d64545">submit("90,095.65")  ✗</text>
+
+    <text x="14" y="216" class="r">WHERE THAT NUMBER COMES FROM</text>
+    <rect x="10" y="222" width="250" height="46" rx="4" fill="#f3f2ee"/>
+    <text x="18" y="241" class="m">boreal only: 2,072,200 / 23</text>
+    <text x="18" y="258" class="m">           = 90,095.65</text>
+
+    <text x="14" y="290" class="s">cobalt's 20 employees never reach the</text>
+    <text x="14" y="306" class="s">answer, so the team is off by $4,991.</text>
+    <text x="14" y="332" class="m">reward = 0.0</text>
+  </g>
+
+  <!-- ===== Column 2: Trained org (right) ===== -->
+  <g transform="translate(305,86)">
+    <rect width="270" height="346" rx="6" fill="#fdfdfd" stroke="#2a78d6" stroke-width="2"/>
+    <text x="14" y="25" class="h">Trained team (step 30, all roles)</text>
+    <text x="14" y="43" class="s">no exhausted workers → correct</text>
+
+    <text x="14" y="68" class="r">ROLLOUT</text>
+    <rect x="10" y="74" width="250" height="64" rx="4" fill="#f3f2ee"/>
+    <text x="18" y="93" class="m">lead turns       4 / 6</text>
+    <text x="18" y="111" class="m">workers at cap   0 requests</text>
+    <text x="18" y="129" class="m">critical path    20 calls</text>
+
+    <text x="14" y="160" class="r">FINAL ANSWER</text>
+    <rect x="10" y="166" width="250" height="28" rx="4" fill="#eaf2fc" stroke="#2a78d6"/>
+    <text x="18" y="184" class="m">submit("$85,105.62")  ✓</text>
+
+    <text x="14" y="216" class="r">GRADING</text>
+    <rect x="10" y="222" width="250" height="46" rx="4" fill="#f3f2ee"/>
+    <text x="18" y="241" class="m">|85,105.62 − 85,104.65| = 0.97</text>
+    <text x="18" y="258" class="m">within the 0.1% tolerance</text>
+
+    <text x="14" y="290" class="s">The critical path (20) is above 18, so</text>
+    <text x="14" y="306" class="s">the team earns no speed bonus.</text>
+    <text x="14" y="332" class="m">reward = 1.0</text>
+  </g>
+
+  <!-- ===== Column 3: Solo baseline ===== -->
+  <g transform="translate(590,86)">
+    <rect width="270" height="346" rx="6" fill="#fdfdfd" stroke="#1baf7a" stroke-width="2"/>
+    <text x="14" y="25" class="h">Solo (same weights, one agent)</text>
+    <text x="14" y="43" class="s">never trained as a solo agent</text>
+
+    <text x="14" y="68" class="r">STEP 0 · BASE MODEL</text>
+    <rect x="10" y="74" width="250" height="64" rx="4" fill="#fdefe8" stroke="#d64545"/>
+    <text x="18" y="93" class="m" fill="#d64545">answer: 72,997.16  ✗</text>
+    <text x="18" y="111" class="s">= 20,585,200 / 282: the mean of every</text>
+    <text x="18" y="127" class="s">employee, with no Finance filter</text>
+
+    <text x="14" y="160" class="r">STEP 30 · AFTER TEAM TRAINING</text>
+    <rect x="10" y="166" width="250" height="28" rx="4" fill="#e6f6f0" stroke="#1baf7a"/>
+    <text x="18" y="184" class="m">answer: 85104.65  ✓  (exact)</text>
+
+    <text x="14" y="216" class="r">WHY IT TRANSFERS</text>
+    <rect x="10" y="222" width="250" height="46" rx="4" fill="#f3f2ee"/>
+    <text x="18" y="241" class="m">list_files · read_file</text>
+    <text x="18" y="258" class="m">run_python</text>
+
+    <text x="14" y="290" class="s">The same data tools the workers practise</text>
+    <text x="14" y="306" class="s">inside the team.</text>
+    <text x="14" y="332" class="m">solo accuracy 45.0% → 62.5%</text>
+  </g>
+</svg>

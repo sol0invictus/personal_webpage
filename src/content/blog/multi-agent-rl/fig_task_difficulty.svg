@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12">
+  <title>Three layers of task difficulty: how hard the question is, how messy the files are, and how many sites the data is split across.</title>
+  <style>
+    .h { font-size: 13.5px; font-weight: bold; fill: #1a1a1a; }
+    .b { font-size: 11.5px; font-weight: bold; fill: #1a1a1a; }
+    .s { font-size: 11px; fill: #52514e; }
+    .e { font-size: 11px; fill: #52514e; font-style: italic; }
+    .m { font-family: "DejaVu Sans Mono", Menlo, monospace; font-size: 10.5px; white-space: pre; }
+  </style>
+  <rect width="900" height="400" fill="#fdfdfd"/>
+
+  <text x="20" y="28" font-weight="bold" font-size="14" fill="#1a1a1a">What makes these tasks hard: three layers stacked on top of each other</text>
+  <text x="20" y="47" class="s">Every task is generated fresh with randomly named columns, so no agent can write a working script without looking at the files first.</text>
+
+  <!-- ===== 1: the question ===== -->
+  <rect x="20" y="62" width="276" height="324" rx="6" fill="#fdfdfd" stroke="#2a78d6" stroke-width="2"/>
+  <rect x="20" y="62" width="276" height="34" rx="6" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text x="34" y="84" class="h">1  How hard the question is</text>
+
+  <text x="34" y="120" class="b">Easy · 1 in 5 tasks</text>
+  <text x="34" y="138" class="s">One filter, count, or sum.</text>
+  <text x="34" y="155" class="e">"How many employees were hired</text>
+  <text x="34" y="170" class="e"> after 2013?"</text>
+
+  <text x="34" y="202" class="b">Medium · 2 in 5</text>
+  <text x="34" y="220" class="s">Join the split table to a lookup table,</text>
+  <text x="34" y="235" class="s">then a weighted average or a winner.</text>
+  <text x="34" y="252" class="e">"What is the average salary in Finance?"</text>
+
+  <text x="34" y="284" class="b">Hard · 2 in 5</text>
+  <text x="34" y="302" class="s">Several steps, such as month-over-month</text>
+  <text x="34" y="317" class="s">changes or counts that must include zeros.</text>
+  <text x="34" y="334" class="e">"Which month of 2024 saw the largest</text>
+  <text x="34" y="349" class="e"> increase in revenue?"</text>
+
+  <!-- ===== 2: messy files ===== -->
+  <rect x="312" y="62" width="276" height="324" rx="6" fill="#fdfdfd" stroke="#eb6834" stroke-width="2"/>
+  <rect x="312" y="62" width="276" height="34" rx="6" fill="#fdefe8" stroke="#eb6834" stroke-width="2"/>
+  <text x="326" y="84" class="h">2  Problems in the files</text>
+
+  <text x="326" y="118" class="s">Half of medium tasks and 9 in 10 hard</text>
+  <text x="326" y="133" class="s">tasks have one or two of these:</text>
+
+  <text x="326" y="162" class="b">Duplicate rows</text>
+  <text x="326" y="178" class="s">about 5% of rows appear twice</text>
+  <text x="326" y="204" class="b">Money stored as text</text>
+  <text x="326" y="220" class="m">"$1,234.50"   "42s"</text>
+  <text x="326" y="246" class="b">Inconsistent names</text>
+  <text x="326" y="262" class="m">" marketing "   "MARKETING"</text>
+  <text x="326" y="288" class="b">Dates written four ways</text>
+  <text x="326" y="304" class="m">"2024-03-05"   "Mar 5, 2024"</text>
+  <text x="326" y="330" class="b">One table split into several files</text>
+
+  <text x="326" y="364" class="s">The right answer is always computed on</text>
+  <text x="326" y="379" class="s">the clean data.</text>
+
+  <!-- ===== 3: more sites ===== -->
+  <rect x="604" y="62" width="276" height="324" rx="6" fill="#fdfdfd" stroke="#1a1a1a" stroke-width="1.5"/>
+  <rect x="604" y="62" width="276" height="34" rx="6" fill="#f3f2ee" stroke="#1a1a1a" stroke-width="1.5"/>
+  <text x="618" y="84" class="h">3  How many sites (2 to 4)</text>
+
+  <text x="618" y="120" class="b">Uneven splits</text>
+  <text x="618" y="138" class="s">Averaging the site averages is wrong.</text>
+  <text x="618" y="153" class="s">The lead has to ask for sums and counts.</text>
+
+  <text x="618" y="185" class="b">Different winners at each site</text>
+  <text x="618" y="203" class="s">The top product at one site may not be</text>
+  <text x="618" y="218" class="s">the top product overall, so workers have</text>
+  <text x="618" y="233" class="s">to send back their full tables.</text>
+
+  <text x="618" y="265" class="b">Mistakes compound</text>
+  <text x="618" y="283" class="s">If each worker gets its part right 75%</text>
+  <text x="618" y="298" class="s">of the time, the team gets clean inputs:</text>
+  <text x="618" y="324" class="m">2 sites   0.75² = 56%</text>
+  <text x="618" y="342" class="m">3 sites   0.75³ = 42%</text>
+  <text x="618" y="360" class="m">4 sites   0.75⁴ = 32%</text>
+</svg>

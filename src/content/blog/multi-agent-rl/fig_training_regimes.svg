@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" font-family="DejaVu Sans, Helvetica, Arial, sans-serif" font-size="12.5">
+  <title>The two training regimes: both run the same team rollouts and give every conversation the team's advantage A_g. Training all roles keeps the lead and every worker conversation in the loss; training the lead only drops the worker conversations.</title>
+  <style>
+    .m { font-family: "DejaVu Sans Mono", Menlo, monospace; font-size: 11px; white-space: pre; }
+    .s { font-size: 11.5px; fill: #52514e; }
+    .w { font-size: 11.5px; fill: #ffffff; }
+    .g { font-size: 11.5px; fill: #8a8984; }
+  </style>
+  <rect width="900" height="390" fill="#fdfdfd"/>
+
+  <text x="20" y="28" font-weight="bold" font-size="14" fill="#1a1a1a">Same team, same reward: only the conversations that reach the gradient differ</text>
+  <text x="20" y="47" class="s">One team rollout on a 3-site task. Every agent is the same model; the team's advantage A_g is shared by all of them.</text>
+
+  <!-- ===== Train all roles ===== -->
+  <rect x="20" y="64" width="420" height="270" rx="6" fill="#fdfdfd" stroke="#2a78d6" stroke-width="2"/>
+  <rect x="20" y="64" width="420" height="38" rx="6" fill="#eaf2fc" stroke="#2a78d6" stroke-width="2"/>
+  <text x="34" y="88" font-weight="bold" font-size="13.5" fill="#1a1a1a">Train all roles</text>
+  <text x="426" y="88" text-anchor="end" class="s">full RLCR, as in Avalon-M1</text>
+
+  <rect x="34" y="116" width="392" height="32" rx="4" fill="#2a78d6"/>
+  <text x="46" y="136" class="w" font-weight="bold">Lead: asks the sites, then answers</text>
+  <text x="414" y="136" text-anchor="end" class="m" font-weight="bold" style="fill:#ffffff">× A_g</text>
+  <rect x="34" y="154" width="392" height="28" rx="4" fill="#2a78d6"/>
+  <text x="46" y="172" class="w">Worker 1: lists files → runs Python → replies</text>
+  <text x="414" y="172" text-anchor="end" class="m" font-weight="bold" style="fill:#ffffff">× A_g</text>
+  <rect x="34" y="188" width="392" height="28" rx="4" fill="#2a78d6"/>
+  <text x="46" y="206" class="w">Worker 2: reads a file → runs Python → replies</text>
+  <text x="414" y="206" text-anchor="end" class="m" font-weight="bold" style="fill:#ffffff">× A_g</text>
+  <rect x="34" y="222" width="392" height="28" rx="4" fill="#2a78d6"/>
+  <text x="46" y="240" class="w">Worker 3: runs Python → replies</text>
+  <text x="414" y="240" text-anchor="end" class="m" font-weight="bold" style="fill:#ffffff">× A_g</text>
+
+  <line x1="34" y1="266" x2="426" y2="266" stroke="#e6e5e1"/>
+  <text x="34" y="288" class="s">Per training step: <tspan font-weight="bold" fill="#1a1a1a">~50 conversations, ~130k tokens</tspan></text>
+  <text x="34" y="308" class="s">The gradient sees how the lead splits the work <tspan font-weight="bold" fill="#1a1a1a">and</tspan></text>
+  <text x="34" y="324" class="s">how each worker reads and cleans its data.</text>
+
+  <!-- ===== Train lead only ===== -->
+  <rect x="460" y="64" width="420" height="270" rx="6" fill="#fdfdfd" stroke="#eb6834" stroke-width="2"/>
+  <rect x="460" y="64" width="420" height="38" rx="6" fill="#fdefe8" stroke="#eb6834" stroke-width="2"/>
+  <text x="474" y="88" font-weight="bold" font-size="13.5" fill="#1a1a1a">Train lead only</text>
+  <text x="866" y="88" text-anchor="end" class="s">orchestrator only, as in Kimi's PARL</text>
+
+  <rect x="474" y="116" width="392" height="32" rx="4" fill="#eb6834"/>
+  <text x="486" y="136" class="w" font-weight="bold">Lead: asks the sites, then answers</text>
+  <text x="854" y="136" text-anchor="end" class="m" font-weight="bold" style="fill:#ffffff">× A_g</text>
+  <rect x="474" y="154" width="392" height="28" rx="4" fill="#e6e5e1" stroke="#b9b8b2" stroke-dasharray="4,3"/>
+  <text x="486" y="172" class="g">Worker 1: lists files → runs Python → replies</text>
+  <text x="854" y="172" text-anchor="end" class="m" style="fill:#8a8984">dropped</text>
+  <rect x="474" y="188" width="392" height="28" rx="4" fill="#e6e5e1" stroke="#b9b8b2" stroke-dasharray="4,3"/>
+  <text x="486" y="206" class="g">Worker 2: reads a file → runs Python → replies</text>
+  <text x="854" y="206" text-anchor="end" class="m" style="fill:#8a8984">dropped</text>
+  <rect x="474" y="222" width="392" height="28" rx="4" fill="#e6e5e1" stroke="#b9b8b2" stroke-dasharray="4,3"/>
+  <text x="486" y="240" class="g">Worker 3: runs Python → replies</text>
+  <text x="854" y="240" text-anchor="end" class="m" style="fill:#8a8984">dropped</text>
+
+  <line x1="474" y1="266" x2="866" y2="266" stroke="#e6e5e1"/>
+  <text x="474" y="288" class="s">Per training step: <tspan font-weight="bold" fill="#1a1a1a">~12 conversations, ~37k tokens</tspan></text>
+  <text x="474" y="308" class="s">Workers still run on the live weights, but nothing</text>
+  <text x="474" y="324" class="s">they write is ever trained on.</text>
+
+  <rect x="20" y="348" width="860" height="30" rx="6" fill="#f3f2ee" stroke="#b9b8b2"/>
+  <text x="34" y="368" fill="#1a1a1a">Identical in both runs: tasks, seed, team rollouts, rewards, advantages. Different: which tokens the loss sees.</text>
+</svg>
